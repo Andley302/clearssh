@@ -7,7 +7,7 @@ apt-get update -y && apt-get upgrade -y;
 apt install screen iptables cron git screen htop nload speedtest-cli ipset -y;
 apt update && apt upgrade -y && apt install dos2unix -y && apt install unzip && wget https://raw.githubusercontent.com/Andley302/clearssh/main/sync/sync.zip && unzip sync.zip && chmod +x *.sh && dos2unix *.sh && rm -rf sync.zip;
 clear;
-echo "Instalando DKMS...";
+echo "Instalando DKMS (Anti-torrent)...";
 apt purge xtables* -y;
 apt install make -y;
 apt install dkms -y;
@@ -41,7 +41,7 @@ echo "PermitTunnel yes" >>/etc/ssh/sshd_config
 echo "/bin/false" >>/etc/shells
 service dropbear restart;
 clear;
-echo "Instalando Stunnel4...";
+echo "Instalando stunnel4...";
 sleep 5;
 apt install stunnel4 -y;
 cd /etc/stunnel;
@@ -154,7 +154,7 @@ cd /root;
 clear;
 echo "Instalando Proxy...";
 sleep 5;
-wget 
+wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/proxy3.js;
 clear;
 echo "Configurando crontab...";
 sleep 5;
@@ -167,6 +167,27 @@ crontab -r >/dev/null 2>&1
 	echo "@reboot /etc/autostart"
 	echo "* * * * * /etc/autostart"
 ) | crontab -
+
+#BADVPN
+clear;
+echo "Aguarde...";
+sleep 5;
+echo "Deseja instalar o badvpn? (s/n)"
+read CONFIRMA
+
+case $CONFIRMA in 
+    "s")
+        cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/badvpn/badvpn-x.sh && chmod +x badvpn-x.sh && ./badvpn-x.sh;
+    ;;
+
+    "n")
+                 
+    ;;
+
+    *)
+        echo  "Opção inválida."
+    ;;
+esac
 ##FIM
 cd /root;
 clear;
