@@ -169,7 +169,7 @@ crontab -r >/dev/null 2>&1
 	echo "*/1 * * * * cd /root/ && ./onlineapp.sh"
 	#echo "0 4 * * *  /sbin/shutdown -r +5"
 ) | crontab -
-
+service cron reload;
 #BADVPN
 clear;
 echo "Aguarde...";
