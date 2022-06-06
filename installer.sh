@@ -126,18 +126,6 @@ case $CONFIRMA in
         echo  "Opção inválida."
     ;;
 esac
-clear;
-echo "Configurando crontab...";
-sleep 5;
-cd /etc;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/autostart;
-chmod +x autostart;
-crontab -r >/dev/null 2>&1
-(
-	crontab -l 2>/dev/null
-	echo "@reboot /etc/autostart"
-	echo "* * * * * /etc/autostart"
-) | crontab -
 #LIMITADOR DE PROCESSOS
 clear;
 echo "Aumentando limite de processos do sistema...";
@@ -154,8 +142,33 @@ cd /root
 sleep 5;
 wget https://github.com/ddo/fast/releases/download/v0.0.4/fast_linux_amd64;
 sudo install fast_linux_amd64 /usr/local/bin/fast;
+#NODE
+clear;
+echo "Instalando NodeJS...";
+sleep 5;
+cd ~
+curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs -y;
 cd /root;
+clear;
+echo "Instalando Proxy...";
+sleep 5;
+wget 
+clear;
+echo "Configurando crontab...";
+sleep 5;
+cd /etc;
+wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/autostart;
+chmod +x autostart;
+crontab -r >/dev/null 2>&1
+(
+	crontab -l 2>/dev/null
+	echo "@reboot /etc/autostart"
+	echo "* * * * * /etc/autostart"
+) | crontab -
 ##FIM
+cd /root;
 clear;
 echo "Fim!";
 sleep 5;
