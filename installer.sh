@@ -193,3 +193,4 @@ cd /root;
 clear;
 echo "Fim!";
 sleep 5;
+rm -rf installer.sh;
