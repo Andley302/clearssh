@@ -1,0 +1,4 @@
+#!/bin/bash
+clear
+#INICIO AUTOMATICO
+netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js
