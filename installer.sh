@@ -135,8 +135,6 @@ mv limits.conf limits.conf.bak;
 wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/limits.conf && chmod +x limits.conf;
 cd /root;
 clear;
-clear;
-clear;
 echo "Instalando fast...";
 cd /root
 sleep 5;
@@ -174,6 +172,7 @@ service cron reload;
 clear;
 echo "Aguarde...";
 sleep 5;
+clear;
 echo "Deseja instalar o badvpn? (s/n)"
 read CONFIRMA
 
