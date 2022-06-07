@@ -163,7 +163,7 @@ case $CONFIRMA in
     sleep 5;
     wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/proxy3.js;
     clear;
-    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js" >>/etc/autostart;
+    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js" >> /etc/autostart;
     netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js
     ;;
 
@@ -178,7 +178,7 @@ case $CONFIRMA in
     wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/wsproxy.py
     wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/antcrashws.sh -O /bin/antcrashws.sh > /dev/null 2>&1
     chmod +x /bin/antcrashws.sh;
-    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80" >>/etc/autostart;
+    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80" >> /etc/autostart;
     netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80
                  
     ;;
