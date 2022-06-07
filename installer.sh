@@ -134,7 +134,21 @@ sleep 5;
 cd /etc/security;
 mv limits.conf limits.conf.bak;
 wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/limits.conf && chmod +x limits.conf;
-cd /root;
+#CRONTAB
+echo "Configurando crontab...";
+sleep 5;
+cd /etc;
+wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/autostart;
+chmod +x autostart;
+crontab -r >/dev/null 2>&1
+(
+	crontab -l 2>/dev/null
+	echo "@reboot /etc/autostart"
+	echo "* * * * * /etc/autostart"
+	echo "*/1 * * * * /root/onlineapp.sh"
+	echo "* * * * * /root/restartdrop.sh"
+) | crontab -
+service cron reload;
 clear;
 echo "Instalando fast...";
 cd /root
@@ -187,20 +201,6 @@ case $CONFIRMA in
         echo  "Opção inválida."
     ;;
 esac
-echo "Configurando crontab...";
-sleep 5;
-cd /etc;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/autostart;
-chmod +x autostart;
-crontab -r >/dev/null 2>&1
-(
-	crontab -l 2>/dev/null
-	echo "@reboot /etc/autostart"
-	echo "* * * * * /etc/autostart"
-	echo "*/1 * * * * /root/onlineapp.sh"
-	echo "* * * * * /root/restartdrop.sh"
-) | crontab -
-service cron reload;
 #BADVPN
 clear;
 echo "Aguarde...";
