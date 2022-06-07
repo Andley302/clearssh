@@ -63,7 +63,7 @@ iptables -I INPUT -p udp --dport 53 -j ACCEPT
 iptables -t nat -I PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
 
 #PORTS REDIRECT
-iptables -t nat -I PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 80
+#iptables -t nat -I PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 80
 iptables -t nat -I PREROUTING -p tcp --dport 8880 -j REDIRECT --to-ports 80
 iptables -t nat -I PREROUTING -p tcp --dport 2052 -j REDIRECT --to-ports 80
 iptables -t nat -I PREROUTING -p tcp --dport 2082 -j REDIRECT --to-ports 80
