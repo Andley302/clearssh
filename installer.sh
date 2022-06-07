@@ -197,8 +197,8 @@ crontab -r >/dev/null 2>&1
 	crontab -l 2>/dev/null
 	echo "@reboot /etc/autostart"
 	echo "* * * * * /etc/autostart"
-	echo "*/1 * * * * cd /root/ && ./onlineapp.sh"
-	#echo "0 4 * * *  /sbin/shutdown -r +5"
+	echo "*/1 * * * * /root/onlineapp.sh"
+	echo "* * * * * /root/restartdrop.sh"
 ) | crontab -
 service cron reload;
 #BADVPN
