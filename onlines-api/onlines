@@ -10,5 +10,5 @@ _onlin=$(printf '%-5s' "$_onli")
 CURRENT_ONLINES=$_onlin
 
 #ESCREVE ARQUIVO
-echo $CURRENT_ONLINES
+echo "Onlines: " $CURRENT_ONLINES;
 
