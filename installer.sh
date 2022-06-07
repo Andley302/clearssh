@@ -193,7 +193,14 @@ esac
 ##FIM
 cd /root;
 clear;
-echo "Fim!";
+echo "Reiniciando DNSTT (Caso tenha sido instalado)...";
+sleep 5;
+restartdns;
+clear;
+echo "Finalizando...";
 sleep 5;
 rm -rf installer.sh;
 rm -rf fast_linux_amd64;
+clear;
+echo "FIM!";
+sleep 5;
