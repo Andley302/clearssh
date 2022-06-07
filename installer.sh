@@ -3,9 +3,8 @@
 echo "ClearSSH - Iniciando instalação...";
 sleep 5;
 clear;
-apt-get update -y && apt-get upgrade -y;
 apt install screen iptables cron git screen htop nload speedtest-cli ipset -y;
-apt update && apt upgrade -y && apt install dos2unix -y && apt install unzip && wget https://raw.githubusercontent.com/Andley302/clearssh/main/sync/sync.zip && unzip sync.zip && chmod +x *.sh && dos2unix *.sh && rm -rf sync.zip;
+apt install dos2unix -y && apt install unzip && wget https://raw.githubusercontent.com/Andley302/clearssh/main/sync/sync.zip && unzip sync.zip && chmod +x *.sh && dos2unix *.sh && rm -rf sync.zip;
 clear;
 echo "Instalando DKMS (Anti-torrent)...";
 apt purge xtables* -y;
