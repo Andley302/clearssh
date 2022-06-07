@@ -199,6 +199,8 @@ restartdns;
 clear;
 echo "Finalizando...";
 sleep 5;
+service dropbear stop;
+service dropbear start;
 rm -rf installer.sh;
 rm -rf fast_linux_amd64;
 clear;
