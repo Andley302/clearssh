@@ -141,20 +141,52 @@ cd /root
 sleep 5;
 wget https://github.com/ddo/fast/releases/download/v0.0.4/fast_linux_amd64;
 sudo install fast_linux_amd64 /usr/local/bin/fast;
-#NODE
 clear;
-echo "Instalando NodeJS...";
+echo "Aguarde...";
 sleep 5;
-cd ~
-curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-sudo bash nodesource_setup.sh
-sudo apt install nodejs -y;
-cd /root;
-clear;
-echo "Instalando Proxy...";
-sleep 5;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/proxy3.js;
-clear;
+echo "Deseja instalar o proxy node (1) ou python (2)? (1/2)"
+read CONFIRMA
+
+case $CONFIRMA in 
+    "1")
+     #NODE
+    clear;
+    echo "Instalando NodeJS...";
+    sleep 5; 
+    cd ~
+    curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+    sudo bash nodesource_setup.sh
+    sudo apt install nodejs -y;
+    cd /root;
+    clear;
+    echo "Instalando Proxy...";
+    sleep 5;
+    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/proxy3.js;
+    clear;
+    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js" >>/etc/autostart;
+    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js
+    ;;
+
+    "2")
+    #python
+    cd /root;
+    clear;
+    echo "Instalando Python...";
+    sleep 5; 
+    apt install python python3 -y;
+    clear;
+    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/wsproxy.py
+    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/antcrashws.sh -O /bin/antcrashws.sh > /dev/null 2>&1
+    chmod +x /bin/antcrashws.sh;
+    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80" >>/etc/autostart;
+    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80
+                 
+    ;;
+
+    *)
+        echo  "Opção inválida."
+    ;;
+esac
 echo "Configurando crontab...";
 sleep 5;
 cd /etc;
