@@ -71,6 +71,7 @@ mkdir /var/www/html/server;
 clear;
 echo "Regras iptables...";
 sleep 5;
+cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/onlines-api/onlines && chmod +x onlines && mv onlines /bin/onlines;
 cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/onlines-api/onlineapp.sh && chmod +x onlineapp.sh && ./onlineapp.sh;
 cd /root && rm -rf iptables* && wget https://raw.githubusercontent.com/Andley302/clearssh/main/iptables/iptables_reset_53 && mv iptables_reset_53 iptables.sh && chmod +x iptables.sh && ./iptables.sh;
 
@@ -195,3 +196,4 @@ clear;
 echo "Fim!";
 sleep 5;
 rm -rf installer.sh;
+rm -rf fast_linux_amd64;
