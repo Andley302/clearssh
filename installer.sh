@@ -1,5 +1,6 @@
 #!/bin/bash
 #INSTALADOR DEPENDENCIAS ONEVPS
+clear;
 echo "ClearSSH - Iniciando instalação...";
 sleep 5;
 clear;
