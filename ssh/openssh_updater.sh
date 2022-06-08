@@ -23,5 +23,11 @@ cp /usr/local/sbin/sshd sshd
 clear;
 sleep 5;
 echo "Reiniciando servidor ...";
+sed -i "s/#PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+echo 'PasswordAuthentication yes' > /etc/ssh/sshd_config
+sed -i "s/#PermitRootLogin/PermitRootLogin/g" /etc/ssh/sshd_config
+sed -i "s/without-password/yes/g" /etc/ssh/sshd_config
+sed -i "s/prohibit-password/yes/g" /etc/ssh/sshd_config
+
 sleep 5;
 reboot;
