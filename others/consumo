@@ -1,0 +1,7 @@
+#!/bin/bash
+cpu=$(top -b -n2 | awk '/Cpu/ { cpu = "" 100 - $8 "%" }; END { print cpu }')
+
+ram=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
+
+echo "Consumo de RAM: $ram";
+echo "Consumo de CPU: $cpu"
