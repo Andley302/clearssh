@@ -17,9 +17,9 @@ make install;
 clear;
 sleep 5;
 echo "Finalizando...";
-sudo cd /usr/sbin;
-sudo mv sshd sshd.bak;
-sudo cp /usr/local/sbin/sshd sshd;
+cd /usr/sbin/
+mv sshd sshd.bak
+cp /usr/local/sbin/sshd sshd
 clear;
 sleep 5;
 echo "Reiniciando servidor ...";
