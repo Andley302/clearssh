@@ -17,6 +17,7 @@ ulimit -u unlimited
 ulimit -v unlimited
 ulimit -x unlimited
 #badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 2048 --max-connections-for-client 2 --client-socket-sndbuf 10000
-badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 4096 --max-connections-for-client 2 --client-socket-sndbuf 10000
+#badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 4096 --max-connections-for-client 2 --client-socket-sndbuf 10000
+badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 8192 --max-connections-for-client 2 --client-socket-sndbuf 10000
 sleep 1
 done
