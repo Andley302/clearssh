@@ -205,8 +205,8 @@ case $CONFIRMA in
     clear;
     wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/sshProxy -O /bin/sshProxy > /dev/null 2>&1
     chmod +x /bin/sshProxy;
-    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS goproxy sshProxy -addr :80 -dstAddr 127.0.0.1:8080" >> /etc/autostart;
-    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS goproxy sshProxy -addr :80 -dstAddr 127.0.0.1:8080
+    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS goproxy sshProxy -addr :80 -dstAddr 127.0.0.1:8080 -custom_handshake "\"101 Switching protocols - "\" " >> /etc/autostart;
+    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS goproxy sshProxy -addr :80 -dstAddr 127.0.0.1:8080 -custom_handshake "101 Switching protocols - "
                  
     ;;
 
