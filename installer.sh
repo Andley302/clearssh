@@ -158,7 +158,7 @@ sudo install fast_linux_amd64 /usr/local/bin/fast;
 clear;
 echo "Aguarde...";
 sleep 5;
-echo "Deseja instalar o proxy node (1), python (2) ou go (3)? (1/2 ou 3)"
+echo "Deseja instalar o proxy node (1), python (2) ou go (3)? (1,2 ou 3)"
 read CONFIRMA
 
 case $CONFIRMA in 
