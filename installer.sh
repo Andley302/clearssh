@@ -158,7 +158,7 @@ sudo install fast_linux_amd64 /usr/local/bin/fast;
 clear;
 echo "Aguarde...";
 sleep 5;
-echo "Deseja instalar o proxy node (1) ou python (2)? (1/2)"
+echo "Deseja instalar o proxy node (1), python (2) ou go (3)? (1/2 ou 3)"
 read CONFIRMA
 
 case $CONFIRMA in 
@@ -194,6 +194,19 @@ case $CONFIRMA in
     chmod +x /bin/antcrashws.sh;
     echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80" >> /etc/autostart;
     netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80
+                 
+    ;;
+    "3")
+    #proxygo
+    cd /root;
+    clear;
+    echo "Instalando Proxy Go...";
+    sleep 5; 
+    clear;
+    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/sshProxy -O /bin/sshProxy > /dev/null 2>&1
+    chmod +x /bin/sshProxy;
+    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS sshProxy -addr :80 -dstAddr 127.0.0.1:8080" >> /etc/autostart;
+    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS sshProxy -addr :80 -dstAddr 127.0.0.1:8080
                  
     ;;
 
