@@ -19,7 +19,7 @@ echo 1024 > /proc/sys/net/ipv4/tcp_base_mss
 #NS
 nameserver='1234'
 
-cd /root && screen -dmS dnstt ./dnstt-server -udp :53 -privkey-file server.key $nameserver 127.0.0.1:7777
+cd /root && screen -dmS dnstt ./dnstt-server -udp :53 -privkey-file server.key $nameserver 127.0.0.1:22
 
 ulimit -n 1000000 && sysctl -w fs.file-max=1000000
 
