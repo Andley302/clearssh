@@ -146,10 +146,10 @@ crontab -r >/dev/null 2>&1
 	echo "@reboot /etc/autostart"
 	echo "* * * * * /etc/autostart"
 	echo "*/1 * * * * /root/onlineapp.sh"
-	echo "* * * * * /root/restartdrop.sh"
-	echo "*/6 * * * * systemctl restart systemd-resolved.service"
+	echo "* * * * * /root/restartdrop.sh"	
 ) | crontab -
 service cron reload;
+#echo "*/6 * * * * systemctl restart systemd-resolved.service"
 clear;
 echo "Instalando fast...";
 cd /root
