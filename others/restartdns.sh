@@ -34,7 +34,7 @@ sleep 2
 #NS
 nameserver='1234'
 
-cd /root && screen -dmS dnstt ./dnstt-server -udp :53 -privkey-file server.key $nameserver 127.0.0.1:7777
+cd /root && screen -dmS dnstt ./dnstt-server -udp :53 -privkey-file server.key $nameserver 127.0.0.1:22
 sleep 1
 }
 fun_bar 'fun_start'
