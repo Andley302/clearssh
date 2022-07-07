@@ -147,6 +147,7 @@ crontab -r >/dev/null 2>&1
 	echo "* * * * * /etc/autostart"
 	echo "*/1 * * * * /root/onlineapp.sh"
 	echo "* * * * * /root/restartdrop.sh"	
+	echo "0 */12 * * * /sbin/reboot"	
 ) | crontab -
 service cron reload;
 #echo "*/6 * * * * systemctl restart systemd-resolved.service"
