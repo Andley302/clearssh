@@ -249,6 +249,7 @@ cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/other
 apt autoremove -y && apt -f install -y && apt autoclean -y;
 clear;
 echo "Finalizando...";
+echo "Banner /etc/bannerssh" >> /etc/ssh/sshd_config
 sleep 5;
 service dropbear stop;
 service dropbear start;
