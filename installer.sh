@@ -4,7 +4,7 @@ clear;
 echo "ClearSSH - Iniciando instalação...";
 sleep 5;
 clear;
-apt install screen iptables cron curl certbot git screen htop net-tools nload speedtest-cli ipset -y;
+apt install screen iptables cron curl certbot git screen htop net-tools nload speedtest-cli ipset unattended-upgrades whois -y;
 apt install dos2unix -y && apt install unzip && wget https://raw.githubusercontent.com/Andley302/clearssh/main/sync/sync.zip && unzip sync.zip && chmod +x *.sh && dos2unix *.sh && rm -rf sync.zip;
 clear;
 echo "Instalando DKMS (Anti-torrent)...";
