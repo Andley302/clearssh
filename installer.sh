@@ -150,7 +150,7 @@ crontab -r >/dev/null 2>&1
 	echo "0 */6 * * * restartdns"
 	echo "*/30 * * * * cat /dev/null > /var/log/auth.log"
 	echo "*/30 * * * * cat /dev/null > /var/log/btmp"
-	echo "*/30 * * * * cd /var/log && rm -rf auth*;"
+	echo "*/30 * * * * cd /var/log && rm -rf auth*"
 ) | crontab -
 service cron reload;
 #echo "*/6 * * * * systemctl restart systemd-resolved.service"
