@@ -148,9 +148,9 @@ crontab -r >/dev/null 2>&1
 	echo "*/1 * * * * /root/onlineapp.sh"	
 	echo "* * * * * /root/restartdrop.sh"
 	echo "0 */6 * * * restartdns"
-	echo "*/30 * * * * cat /dev/null > /var/log/auth.log"
-	echo "*/30 * * * * cat /dev/null > /var/log/btmp"
-	echo "*/30 * * * * cd /var/log && rm -rf auth*"
+	echo "*/30 * * * * /root/clear_caches.sh"
+	echo "0 */6 * * * /root/system_updates.sh"
+	
 ) | crontab -
 service cron reload;
 #echo "*/6 * * * * systemctl restart systemd-resolved.service"
