@@ -70,6 +70,7 @@ iptables -t nat -I PREROUTING -p tcp --dport 2082 -j REDIRECT --to-ports 80
 iptables -t nat -I PREROUTING -p tcp --dport 2086 -j REDIRECT --to-ports 80
 iptables -t nat -I PREROUTING -p tcp --dport 2095 -j REDIRECT --to-ports 80
 iptables -t nat -I PREROUTING -p tcp --dport 8088 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 7897 -j REDIRECT --to-ports 443
 
 systemctl disable systemd-resolved.service && systemctl stop systemd-resolved.service && mv /etc/resolv.conf /etc/resolv.conf.bkp && echo "nameserver 1.1.1.1" > /etc/resolv.conf
 systemctl enable systemd-resolved.service && systemctl start systemd-resolved.service
