@@ -6,6 +6,8 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 sudo systemctl stop systemd-resolved;
 sudo systemctl disable systemd-resolved;
 sudo systemctl mask systemd-resolved;
+sudo systemctl unmask systemd-resolved;
+sudo systemctl enable systemd-resolved && sudo systemctl start systemd-resolved;
 clear;
 echo "ClearSSH - Iniciando instalação...";
 sleep 5;
