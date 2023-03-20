@@ -1,274 +1,133 @@
 #!/bin/bash
-#INSTALADOR DEPENDENCIAS ONEVPS
-#sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
-#sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
-#sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
-#sudo systemctl stop systemd-resolved;
-#sudo systemctl disable systemd-resolved;
-#sudo systemctl mask systemd-resolved;
-#sudo systemctl unmask systemd-resolved;
-#sudo systemctl enable systemd-resolved && sudo systemctl start systemd-resolved;
-clear;
-echo "ClearSSH - Iniciando instalação...";
-sleep 5;
-clear;
-apt install screen iptables cron curl certbot git screen htop net-tools nload speedtest-cli ipset unattended-upgrades whois -y;
-apt install dos2unix -y && apt install unzip && wget https://raw.githubusercontent.com/Andley302/clearssh/main/sync/sync.zip && unzip sync.zip && chmod +x *.sh && dos2unix *.sh && rm -rf sync.zip;
-clear;
-echo "Instalando DKMS (Anti-torrent)...";
-apt purge xtables* -y;
-apt install make -y;
-apt install dkms -y;
-apt install linux-headers-$(uname -r);
-cd /root;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/iptables/xtables-addons-common_3.18-1_amd64.deb;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/iptables/xtables-addons-dkms_3.18-1_all.deb;
-dpkg -i *.deb;
-apt --fix-broken install;
-rm -rf *.deb;
-clear;
-echo "Banner SSH...";
-sleep 5
-cd /etc;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/ssh/bannerssh;
-cd /root;
-clear;
-echo "Instalando Dropbear...";
-sleep 5;
-porta=8080;
-apt install dropbear -y;
-sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear >/dev/null 2>&1
-sed -i "s/DROPBEAR_PORT=22/DROPBEAR_PORT=$porta/g" /etc/default/dropbear >/dev/null 2>&1
-sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 8000 -p 7777"/g' /etc/default/dropbear >/dev/null 2>&1
-sed -i 's/DROPBEAR_BANNER=""//g' /etc/default/dropbear >/dev/null 2>&1
-sed -i "$ a DROPBEAR_BANNER=\"/etc/bannerssh\"" /etc/default/dropbear;
-grep -v "^PasswordAuthentication yes" /etc/ssh/sshd_config >/tmp/passlogin && mv /tmp/passlogin /etc/ssh/sshd_config
-echo "PasswordAuthentication yes" >>/etc/ssh/sshd_config
-grep -v "^PermitTunnel yes" /etc/ssh/sshd_config >/tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
-echo "PermitTunnel yes" >>/etc/ssh/sshd_config
-echo "/bin/false" >>/etc/shells
-service dropbear restart;
-clear;
-echo "Instalando stunnel4...";
-sleep 5;
-apt install stunnel4 -y;
-cd /etc/stunnel;
-rm -rf stunnel.conf;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/stunnel/stunnel.conf;
-sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
-clear;
-echo "Verificando certificados stunnel...";
-sleep 5;
-if [ -e cert.pem ]
-then
-    echo "Certificado já está instalado. Continuando...."
-else
-    echo "Baixando certificados..."
-    wget https://raw.githubusercontent.com/Andley302/clearssh/main/stunnel/cert.pem
-	wget https://raw.githubusercontent.com/Andley302/clearssh/main/stunnel/key.pem
-fi
-service stunnel4 restart;
-clear;
-echo "API Onlines (Apache2)...";
-sleep 5;
-apt install apache2 -y;
-cd /etc/apache2 && rm -rf ports.conf;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/onlines-api/ports.conf;
-service apache2 restart;
-mkdir /var/www/html/server;
-clear;
-echo "Regras iptables...";
-sleep 5;
-cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/onlines-api/onlines && chmod +x onlines && mv onlines /bin/onlines;
-cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/onlines-api/onlineapp.sh && chmod +x onlineapp.sh && ./onlineapp.sh;
-cd /root && rm -rf iptables* && wget https://raw.githubusercontent.com/Andley302/clearssh/main/iptables/iptables_reset_53 && mv iptables_reset_53 iptables.sh && chmod +x iptables.sh && ./iptables.sh;
+iptables -P INPUT ACCEPT;
+iptables -P FORWARD ACCEPT;
+iptables -P OUTPUT ACCEPT;
+iptables -t nat -F;
+iptables -t mangle -F;
+iptables -F;
+iptables -X;
 
-##BAIXA E COMPILA DNSTT
-clear;
-echo "Preparando DNSTT...";
-sleep 5;
-cd /usr/local;
-wget https://golang.org/dl/go1.16.2.linux-amd64.tar.gz;
-tar xvf go1.16.2.linux-amd64.tar.gz;
-export GOROOT=/usr/local/go;
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH;
-cd /root;
-git clone https://www.bamsoftware.com/git/dnstt.git;
-cd /root/dnstt/dnstt-server;
-go build;
-cd /root/dnstt/dnstt-server && cp dnstt-server /root/dnstt-server;
-cd /root;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/dnstt/server.key;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/dnstt/server.pub;
-##
-##ENABLE RC.LOCAL
-set_ns () {
-cd /etc;
-mv rc.local rc.local.bkp;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/rc.local;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/restartdns.sh;
-chmod +x /etc/rc.local;
-echo -ne "\033[1;32m INFORME SEU NS (NAMESERVER)\033[1;37m: "; read nameserver
-sed -i "s;1234;$nameserver;g" /etc/rc.local > /dev/null 2>&1
-sed -i "s;1234;$nameserver;g" restartdns.sh > /dev/null 2>&1
-systemctl enable rc-local;
-systemctl start rc-local;
-chmod +x restartdns.sh
-mv restartdns.sh /bin/restartdns
-}
-clear;
-echo "Aguarde...";
-sleep 5;
-echo "Deseja instalar o DNSTT? (s/n)"
-read CONFIRMA
 
-case $CONFIRMA in 
-    "s")
-        set_ns
-    ;;
+##IPSET
+ipset flush
+ipset create torrent-sites hash:ip 2> /dev/null
+TORRENT_SITES_IPS=$(getent ahosts \
+        yts.mx \
+        yts.rs \
+        yts.vc \
+        yts.pm \
+        yts.ai \
+        yts.io \
+        yts.ae \
+        yts.ag \
+        eztv.re \
+        rarbg.to \
+        1337x.to \
+        yts.movie \
+        yifyddl.co \
+        zooqle.com \
+        torlock.cc \
+        torlock.com \
+        demonoid.is \
+        yts-movie.com \
+        pirate-bay.in \
+        dontorrent.app \
+        thepiratebay.by \
+        yify-movies.net \
+        torrentz2eu.org \
+        limetorrents.pro \
+        thepiratebay.org \
+        yts.unblockit.win \
+        yts.unblockit.win \
+        yts.nocensor.club \
+        yifytorrenthd.net \
+        tpbproxypirate.com \
+        thepirates-bay.com \
+        thepiratebay-3.org \
+        thepiratebay.us.org \
+        thepiratebay.us.com \
+        thepiratebay.co.com \
+        pirateproxy-bay.com \
+        pirate-bay-proxy.org \
+        torrentdownloads.mrunblock.xyz \
+        |grep : -v|cut -d" " -f1|sort|uniq)
+for THOST in $TORRENT_SITES_IPS
+do
+    ipset add torrent-sites $THOST
+done
 
-    "n")
-                 
-    ;;
 
-    *)
-        echo  "Opção inválida."
-    ;;
-esac
-#LIMITADOR DE PROCESSOS
-clear;
-echo "Aumentando limite de processos do sistema...";
-sleep 5;
-cd /etc/security;
-mv limits.conf limits.conf.bak;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/limits.conf && chmod +x limits.conf;
-#CRONTAB
-echo "Configurando crontab...";
-sleep 5;
-cd /etc;
-wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/autostart;
-chmod +x autostart;
-crontab -r >/dev/null 2>&1
-(
-	crontab -l 2>/dev/null
-	echo "@reboot /etc/autostart"
-	echo "* * * * * /etc/autostart"
-	echo "*/1 * * * * /root/onlineapp.sh"	
-	echo "* * * * * /root/restartdrop.sh"
-	echo "0 */6 * * * restartdns"
-	echo "*/30 * * * * /root/clear_caches.sh"
-	echo "0 */6 * * * /root/system_updates.sh"
-	
-) | crontab -
-service cron reload;
-#echo "*/6 * * * * systemctl restart systemd-resolved.service"
-#echo "* * * * * /root/restartdrop.sh"	
-#echo "0 */12 * * * /sbin/reboot"
-clear;
-echo "Instalando fast...";
-cd /root
-sleep 5;
-wget https://github.com/ddo/fast/releases/download/v0.0.4/fast_linux_amd64;
-sudo install fast_linux_amd64 /usr/local/bin/fast;
-clear;
-echo "Aguarde...";
-sleep 5;
-echo "Deseja instalar o proxy node (1), python (2) ou go (3)? (1,2 ou 3)"
-read CONFIRMA
+#SLOWDNS
+#iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+#iptables -I INPUT -p udp --dport 53 -j ACCEPT 
+#iptables -t nat -I PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53
 
-case $CONFIRMA in 
-    "1")
-     #NODE
-    clear;
-    echo "Instalando NodeJS...";
-    sleep 5; 
-    cd ~
-    curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-    sudo bash nodesource_setup.sh
-    sudo apt install nodejs -y;
-    cd /root;
-    clear;
-    echo "Instalando Proxy...";
-    sleep 5;
-    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/proxy3.js;
-    clear;
-    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js" >> /etc/autostart;
-    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS nodews node /root/proxy3.js
-    ;;
+#PORTS REDIRECT
+#iptables -t nat -I PREROUTING -p tcp --dport 8080 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 8880 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 2052 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 2082 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 2086 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 2095 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 8088 -j REDIRECT --to-ports 80
+iptables -t nat -I PREROUTING -p tcp --dport 7897 -j REDIRECT --to-ports 443
 
-    "2")
-    #python
-    cd /root;
-    clear;
-    echo "Instalando Python...";
-    sleep 5; 
-    apt install python python3 -y;
-    clear;
-    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/wsproxy.py
-    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/antcrashws.sh -O /bin/antcrashws.sh > /dev/null 2>&1
-    chmod +x /bin/antcrashws.sh;
-    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80" >> /etc/autostart;
-    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS wsproxy80 antcrashws.sh 80
-                 
-    ;;
-    "3")
-    #proxygo
-    cd /root;
-    clear;
-    echo "Instalando Proxy Go...";
-    sleep 5; 
-    clear;
-    wget https://raw.githubusercontent.com/Andley302/clearssh/main/wsproxy/sshProxy -O /bin/sshProxy > /dev/null 2>&1
-    chmod +x /bin/sshProxy;
-    echo -e "netstat -tlpn | grep -w 80 > /dev/null || screen -dmS goproxy sshProxy -addr :80 -dstAddr 127.0.0.1:8080 -custom_handshake "\"101 Switching protocols - "\" " >> /etc/autostart;
-    netstat -tlpn | grep -w 80 > /dev/null || screen -dmS goproxy sshProxy -addr :80 -dstAddr 127.0.0.1:8080 -custom_handshake "101 Switching protocols - "
-                 
-    ;;
+#systemctl disable systemd-resolved.service && systemctl stop systemd-resolved.service && mv /etc/resolv.conf /etc/resolv.conf.bkp && echo "nameserver 1.1.1.1" > /etc/resolv.conf
+#systemctl enable systemd-resolved.service && systemctl start systemd-resolved.service
+#systemctl stop systemd-resolved
+#systemctl disable systemd-resolved
 
-    *)
-        echo  "Opção inválida."
-    ;;
-esac
-#BADVPN
-clear;
-echo "Aguarde...";
-sleep 5;
-clear;
-echo "Deseja instalar o badvpn? (s/n)"
-read CONFIRMA
+#Block torrent trafic
+iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j DROP
+iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j DROP
+iptables -A FORWARD -m string --algo bm --string "peer_id=" -j DROP
+iptables -A FORWARD -m string --algo bm --string ".torrent" -j DROP
+iptables -A FORWARD -m string --algo bm --string "announce.php?passkey=" -j DROP
+iptables -A FORWARD -m string --algo bm --string "torrent" -j DROP
+iptables -A FORWARD -m string --algo bm --string "announce" -j DROP
+iptables -A FORWARD -m string --algo bm --string "info_hash" -j DROP
 
-case $CONFIRMA in 
-    "s")
-        cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/badvpn/badvpn-x.sh && chmod +x badvpn-x.sh && ./badvpn-x.sh;
-    ;;
+iptables -I FORWARD -p tcp -m ipp2p --bit -j DROP
+iptables -I FORWARD -p udp -m ipp2p --bit -j DROP
+iptables -A FORWARD -p tcp -m ipp2p --edk -j DROP  # Bloqueia eDonkey e eMule
+iptables -A FORWARD -p udp -m ipp2p --edk -j DROP
+iptables -A FORWARD -m ipp2p --edk --bit -j DROP
 
-    "n")
-                 
-    ;;
+# Torrent Sites
+iptables -A FORWARD -m set --match-set torrent-sites dst -j DROP
+# Torrent Default Ports (6881:6889:6969)
+iptables -A FORWARD -p tcp -m multiport --dport 1024:2048,2560:3001,3724,6112,6800:7000 -j DROP
+iptables -A FORWARD -p udp -m multiport --dport 1024:2048,2560:3001,3724,6112,6800:7000 -j DROP
 
-    *)
-        echo  "Opção inválida."
-    ;;
-esac
-##FIM
-cd /root;
-clear;
-echo "Reiniciando DNSTT (Caso tenha sido instalado)...";
-sleep 5;
-restartdns;
-clear;
-echo "Ferramentas de otimização....";
-sleep 5;
-cd /root && wget https://raw.githubusercontent.com/Andley302/clearssh/main/others/consumo && chmod +x consumo && mv consumo /bin/consumo;
-apt autoremove -y && apt -f install -y && apt autoclean -y;
-clear;
-echo "Finalizando...";
-echo "Banner /etc/bannerssh" >> /etc/ssh/sshd_config
-sleep 5;
-service dropbear stop;
-service dropbear start;
-rm -rf installer.sh;
-rm -rf fast_linux_amd64;
-clear;
-echo "FIM!";
-sleep 5;
+# To Prevent Mail Spam/Hacking
+iptables -A FORWARD -p tcp -m multiport --dport 25,26,60:70,110,143,389,465,587 -j DROP
+iptables -A FORWARD -p tcp -m multiport --dport 636,993,995,2525,5010,5060,8085 -j DROP
+iptables -A FORWARD -p udp -m multiport --dport 25,26,60:70,110,143,389,465,587 -j DROP
+iptables -A FORWARD -p udp -m multiport --dport 636,993,995,2525,5010,5060,8085 -j DROP
+
+#ovpn
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o ens0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o ens192 -j MASQUERADE
+
+
+#PROCESS LIMITS
+ulimit -c unlimited
+ulimit -d unlimited
+ulimit -e unlimited
+ulimit -f unlimited
+ulimit -i unlimited
+ulimit -l unlimited
+ulimit -m unlimited
+ulimit -n 1000000 && sysctl -w fs.file-max=1000000
+ulimit -q unlimited
+ulimit -r unlimited
+ulimit -s unlimited
+ulimit -t unlimited
+ulimit -u unlimited
+ulimit -v unlimited
+ulimit -x unlimited
+
+#REINICIA STUNNEL EM CASO DELE NAO INICIAR
+#service stunnel4 stop && service stunnel4 start;
