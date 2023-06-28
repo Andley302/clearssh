@@ -105,6 +105,12 @@ iptables -A FORWARD -p tcp -m multiport --dport 636,993,995,2525,5010,5060,8085 
 iptables -A FORWARD -p udp -m multiport --dport 25,26,60:70,110,143,389,465,587 -j DROP
 iptables -A FORWARD -p udp -m multiport --dport 636,993,995,2525,5010,5060,8085 -j DROP
 
+# UDP PORT
+UDP_PORT=":36712"
+
+iptables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:65000 -j DNAT --to-destination $UDP_PORT
+ip6tables -t nat -A PREROUTING -i $(ip -4 route ls|grep default|grep -Po '(?<=dev )(\S+)'|head -1) -p udp --dport 10000:65000 -j DNAT --to-destination $UDP_PORT
+
 #PROCESS LIMITS
 ulimit -c unlimited
 ulimit -d unlimited
